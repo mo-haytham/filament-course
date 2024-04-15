@@ -33,7 +33,9 @@ class ProductResource extends Resource
                 Forms\Components\Radio::make('status')
                     ->options(ProductStatusEnum::valuesArray()),
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name'),
+                    ->relationship('category', 'name'), Forms\Components\Select::make('tags')
+                    ->relationship('tags', 'name')
+                    ->multiple(),
             ]);
     }
 
@@ -55,6 +57,7 @@ class ProductResource extends Resource
                     ->getStateUsing(function (Product $product): string {
                         return ucfirst($product->status->value);
                     }),
+                Tables\Columns\TextColumn::make('tags.name'),
             ])
             ->filters([
                 //
