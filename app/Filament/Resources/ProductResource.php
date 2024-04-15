@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ProductStatusEnum;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
@@ -29,6 +30,10 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric(),
+                Forms\Components\Radio::make('status')
+                    ->options(ProductStatusEnum::valuesArray()),
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'name'),
             ]);
     }
 
@@ -41,10 +46,15 @@ class ProductResource extends Resource
                     ->searchable(isIndividual: true, isGlobal: false),
                 Tables\Columns\TextColumn::make('price')
                     ->money('usd')
-                    ->getStateUsing(function (Product $record): float {
-                        return $record->price / 100;
+                    ->getStateUsing(function (Product $product): float {
+                        return $product->price / 100;
                     })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('category.name'),
+                Tables\Columns\TextColumn::make('status')
+                    ->getStateUsing(function (Product $product): string {
+                        return ucfirst($product->status->value);
+                    }),
             ])
             ->filters([
                 //
