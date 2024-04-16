@@ -52,16 +52,32 @@ class ProductResource extends Resource
                         return $product->price / 100;
                     })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category.name'),
+                Tables\Columns\TextColumn::make('category.name')
+                // ->url(fn (Product $product): string => CategoryResource::getUrl('index')),
+                ->url(route('index'),true),
                 Tables\Columns\TextColumn::make('status')
-                    ->getStateUsing(function (Product $product): string {
-                        return ucfirst($product->status->value);
+                    ->badge()
+                    ->color(fn (ProductStatusEnum $state): string => match ($state) {
+                        ProductStatusEnum::InStock => 'primary',
+                        ProductStatusEnum::ComingSoon => 'info',
+                        ProductStatusEnum::SoldOut => 'danger',
                     }),
-                Tables\Columns\TextColumn::make('tags.name'),
+                Tables\Columns\TextColumn::make('tags.name')->badge(),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(ProductStatusEnum::valuesArray()),
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'name'),
+                Tables\Filters\Filter::make('name')
+                    ->form([
+                        Forms\Components\TextInput::make('name')
+                            ->placeholder("Search by name"),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->where('name', 'like', '%' . $data['name'] . '%');
+                    }),
+            ], layout: Tables\Enums\FiltersLayout::Modal)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
