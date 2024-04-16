@@ -36,6 +36,7 @@ class ProductResource extends Resource
                     ->relationship('category', 'name'), Forms\Components\Select::make('tags')
                     ->relationship('tags', 'name')
                     ->multiple(),
+                Forms\Components\Checkbox::make('is_active'),
             ]);
     }
 
@@ -63,6 +64,7 @@ class ProductResource extends Resource
                         ProductStatusEnum::SoldOut => 'danger',
                     }),
                 Tables\Columns\TextColumn::make('tags.name')->badge(),
+                Tables\Columns\ToggleColumn::make('is_active'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
