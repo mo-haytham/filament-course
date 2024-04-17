@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\ProductStatusEnum;
+use App\Filament\Forms\Components\MoneyInput;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
@@ -27,13 +28,12 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric(),
+                MoneyInput::make('price'),
                 Forms\Components\Radio::make('status')
                     ->options(ProductStatusEnum::valuesArray()),
                 Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name'), Forms\Components\Select::make('tags')
+                    ->relationship('category', 'name'),
+                Forms\Components\Select::make('tags')
                     ->relationship('tags', 'name')
                     ->multiple(),
                 Forms\Components\Checkbox::make('is_active'),
@@ -53,9 +53,9 @@ class ProductResource extends Resource
                         return $product->price / 100;
                     })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category.name')
+                Tables\Columns\TextColumn::make('category.name'),
                 // ->url(fn (Product $product): string => CategoryResource::getUrl('index')),
-                ->url(route('index'),true),
+                // ->url(route('index'), true),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (ProductStatusEnum $state): string => match ($state) {
