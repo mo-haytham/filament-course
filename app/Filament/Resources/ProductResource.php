@@ -25,19 +25,36 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                MoneyInput::make('price'),
-                Forms\Components\Radio::make('status')
-                    ->options(ProductStatusEnum::valuesArray()),
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name'),
-                Forms\Components\Select::make('tags')
-                    ->relationship('tags', 'name')
-                    ->multiple(),
-                Forms\Components\Checkbox::make('is_active'),
-            ]);
+                Forms\Components\Wizard::make([
+                    Forms\Components\Wizard\Step::make('Main Data')
+                        ->schema([
+                            Forms\Components\Section::make()
+                                ->description('User must fill this information')
+                                ->schema([
+                                    Forms\Components\TextInput::make('name')
+                                        ->required()
+                                        ->columnSpan(2)
+                                        ->maxLength(255),
+                                    MoneyInput::make('price'),
+                                ]),
+                        ]),
+                    Forms\Components\Wizard\Step::make('Additional Data')
+                        ->schema([
+                            Forms\Components\Fieldset::make('Important Information')
+                                ->schema([
+                                    Forms\Components\RichEditor::make('description')
+                                        ->columnSpanFull(),
+                                    Forms\Components\Radio::make('status')
+                                        ->options(ProductStatusEnum::valuesArray()),
+                                    Forms\Components\Select::make('category_id')
+                                        ->relationship('category', 'name'),
+                                    Forms\Components\Select::make('tags')
+                                        ->relationship('tags', 'name')
+                                        ->multiple(),
+                                ]),
+                        ]),
+                ]),
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
