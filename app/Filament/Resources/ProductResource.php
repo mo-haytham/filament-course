@@ -65,6 +65,7 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->sortable()
+                    ->url(fn (Product $record): string => ProductResource::getUrl('view', ['record' => $record->id]))
                     ->searchable(isIndividual: true, isGlobal: false),
                 Tables\Columns\TextColumn::make('price')
                     ->money('usd')
@@ -100,7 +101,8 @@ class ProductResource extends Resource
                     }),
             ], layout: Tables\Enums\FiltersLayout::Modal)
             ->actions([
-                Tables\Actions\EditAction::make(),
+            Tables\Actions\ViewAction::make()->color('primary'),
+            Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
@@ -123,6 +125,7 @@ class ProductResource extends Resource
             'index' => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'view' => Pages\ViewProduct::route('/{record}'),
         ];
     }
 }
