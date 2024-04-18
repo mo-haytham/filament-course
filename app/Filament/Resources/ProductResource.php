@@ -40,7 +40,13 @@ class ProductResource extends Resource
                                 ->schema([
                                     Forms\Components\TextInput::make('name')
                                         ->required()
-                                        ->columnSpan(2)
+                                        ->live(onBlur: true)
+                                        ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', str()->slug($state)))
+                                        ->maxLength(255),
+                                    Forms\Components\TextInput::make('slug')
+                                        ->required()
+                                        ->readOnly()
+                                        ->disabledOn('edit')
                                         ->maxLength(255),
                                     MoneyInput::make('price'),
                                 ]),
@@ -106,8 +112,8 @@ class ProductResource extends Resource
                     }),
             ], layout: Tables\Enums\FiltersLayout::Modal)
             ->actions([
-            Tables\Actions\ViewAction::make()->color('primary'),
-            Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->color('primary'),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
