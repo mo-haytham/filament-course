@@ -14,13 +14,14 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        "name",
-        "price",
-        "category_id",
-        "status",
+        'name',
+        'price',
+        'category_id',
+        'status',
         'is_active',
         'description',
         'slug',
+        'company_id'
     ];
 
     protected $casts = [
@@ -40,5 +41,10 @@ class Product extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 }
