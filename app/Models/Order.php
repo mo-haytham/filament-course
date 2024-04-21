@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -11,7 +12,7 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        "user_id", "product_id", "price", "is_completed"
+        "user_id", "product_id", "price", "is_completed", "team_id"
     ];
 
     public function user()
@@ -22,5 +23,10 @@ class Order extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function team():BelongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 }
