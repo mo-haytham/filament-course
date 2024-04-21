@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -26,6 +27,9 @@ class AccountantPanelProvider extends PanelProvider
             ->id('accountant')
             ->path('accountant')
             ->brandName('Accounting')
+            // ->plugins([
+            //     FilamentShieldPlugin::make()
+            // ])
             ->login()
             ->colors([
                 'primary' => Color::Green,

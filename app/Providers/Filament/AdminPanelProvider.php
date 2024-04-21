@@ -3,7 +3,9 @@
 namespace App\Providers\Filament;
 
 use App\Http\Middleware\ApplyTenantScopes;
+use App\Http\Middleware\TeamsPermission;
 use App\Models\Team;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -54,9 +56,13 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                TeamsPermission::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->plugins([
+                FilamentShieldPlugin::make()
+            ])
             ->authMiddleware([
                 Authenticate::class,
             ]);
