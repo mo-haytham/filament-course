@@ -12,7 +12,8 @@ class Team extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
+        'slug',
     ];
 
     public function roles(): HasMany
