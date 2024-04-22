@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Role as ModelsRole;
 
 class Role extends ModelsRole
 {
-    protected $fillable = ["team_id"];
+    protected $guarded = [];
 
     public function team(): BelongsTo
     {

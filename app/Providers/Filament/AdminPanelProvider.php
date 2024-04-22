@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->tenant(Team::class, slugAttribute: 'slug')
+            ->tenant(Team::class, slugAttribute: 'slug', ownershipRelationship: 'team')
             ->tenantMiddleware([
                 ApplyTenantScopes::class,
             ], isPersistent: true)
