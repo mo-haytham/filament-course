@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         $team = Team::create([
             'name' => 'Boca',
+            'slug' => 'boca',
         ]);
 
         User::create([
